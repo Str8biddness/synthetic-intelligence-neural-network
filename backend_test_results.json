@@ -1,0 +1,88 @@
+{
+  "total_tests": 11,
+  "passed_tests": 11,
+  "failed_tests": 0,
+  "success_rate": 100.0,
+  "avg_response_time_ms": 44.60549354553223,
+  "max_response_time_ms": 80.44314384460449,
+  "sub_500ms_percentage": 100.0,
+  "test_results": [
+    {
+      "test_name": "Health Check",
+      "success": true,
+      "details": "SI engine operational: operational",
+      "response_time_ms": 80.44314384460449,
+      "timestamp": "2026-01-04T14:11:37.442222"
+    },
+    {
+      "test_name": "SI Ask - What is consciousnes...",
+      "success": true,
+      "details": "Confidence: 0.85, Patterns: 5, Internal time: 1.8ms, Sub-500ms: True",
+      "response_time_ms": 47.00112342834473,
+      "timestamp": "2026-01-04T14:11:37.489920"
+    },
+    {
+      "test_name": "SI Ask - Explain quantum mech...",
+      "success": true,
+      "details": "Confidence: 0.75, Patterns: 2, Internal time: 1.2ms, Sub-500ms: True",
+      "response_time_ms": 41.57400131225586,
+      "timestamp": "2026-01-04T14:11:37.532194"
+    },
+    {
+      "test_name": "SI Ask - How does gravity wor...",
+      "success": true,
+      "details": "Confidence: 0.72, Patterns: 5, Internal time: 1.9ms, Sub-500ms: True",
+      "response_time_ms": 44.65150833129883,
+      "timestamp": "2026-01-04T14:11:37.577590"
+    },
+    {
+      "test_name": "SI Ask - What is the meaning ...",
+      "success": true,
+      "details": "Confidence: 0.85, Patterns: 2, Internal time: 1.3ms, Sub-500ms: True",
+      "response_time_ms": 41.46862030029297,
+      "timestamp": "2026-01-04T14:11:37.619828"
+    },
+    {
+      "test_name": "SI Simulate",
+      "success": true,
+      "details": "Generated 4 reality branches",
+      "response_time_ms": 39.740562438964844,
+      "timestamp": "2026-01-04T14:11:37.660343"
+    },
+    {
+      "test_name": "SI Causal Reasoning",
+      "success": true,
+      "details": "Causal analysis completed",
+      "response_time_ms": 38.90585899353027,
+      "timestamp": "2026-01-04T14:11:37.699968"
+    },
+    {
+      "test_name": "SI Statistics",
+      "success": true,
+      "details": "Patterns: 36, Entities: 43, Avg response: 1.7ms",
+      "response_time_ms": 42.91534423828125,
+      "timestamp": "2026-01-04T14:11:37.743661"
+    },
+    {
+      "test_name": "SI Patterns",
+      "success": true,
+      "details": "Retrieved 20 patterns, showing 20",
+      "response_time_ms": 33.260345458984375,
+      "timestamp": "2026-01-04T14:11:37.777884"
+    },
+    {
+      "test_name": "SI Self-Observe",
+      "success": true,
+      "details": "Self-observation completed",
+      "response_time_ms": 36.09442710876465,
+      "timestamp": "2026-01-04T14:11:37.814785"
+    },
+    {
+      "test_name": "Performance Requirements",
+      "success": true,
+      "details": "Avg: 44.6ms, Max: 80.4ms, Sub-500ms: 100.0% (10/10)",
+      "response_time_ms": 0,
+      "timestamp": "2026-01-04T14:11:37.814843"
+    }
+  ]
+}
