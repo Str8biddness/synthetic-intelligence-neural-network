@@ -1,0 +1,104 @@
+{
+  "design_system": {
+    "identity": "E1: The Anti-AI Designer",
+    "core_philosophy": "Synthetic Intelligence requires a Synthetic Aesthetic. No soft gradients, no friendly rounded corners. Raw data, visible grids, and high-contrast terminal aesthetics.",
+    "theme_strategy": "dark_mode_only",
+    "typography": {
+      "font_families": {
+        "headings": "Chivo, sans-serif",
+        "body": "Manrope, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "usage_rules": {
+        "headings": "Use Chivo for all section titles. Tracking tight (-0.02em). Uppercase for subheaders.",
+        "body": "Manrope for all UI text. High legibility.",
+        "mono": "JetBrains Mono for ALL data values, confidence scores, pattern IDs, and chat logs."
+      },
+      "installation": "Import via Google Fonts in index.css: @import url('https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;700;900&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap');"
+    },
+    "colors": {
+      "palette": {
+        "background": "#050505",
+        "surface": "#0A0A0A",
+        "surface_highlight": "#121212",
+        "border": "#262626",
+        "primary": "#00FF94",
+        "primary_dim": "rgba(0, 255, 148, 0.1)",
+        "secondary": "#6366F1",
+        "accent": "#F43F5E",
+        "text_main": "#EDEDED",
+        "text_muted": "#888888"
+      },
+      "tailwind_config_extension": {
+        "colors": {
+          "si-black": "#050505",
+          "si-panel": "#0A0A0A",
+          "si-laser": "#00FF94",
+          "si-indigo": "#6366F1",
+          "si-alert": "#F43F5E"
+        }
+      }
+    },
+    "visual_enhancers": {
+      "grid_background": "Use a CSS radial-gradient dot pattern or linear-gradient grid pattern on the main background. Opacity 0.05.",
+      "tracing_beam": "Active panels (like the Reasoning Engine) must have a moving gradient border or 'tracing beam' effect to show activity.",
+      "scanlines": "Optional: Overlay a pointer-events-none div with repeating-linear-gradient to simulate CRT scanlines on the Chat Interface.",
+      "glassmorphism": "Use backdrop-blur-xl with bg-black/60 for floating panels. Add a 1px border-white/10."
+    },
+    "components": {
+      "radius": "rounded-sm",
+      "buttons": "Rectangular, sharp edges. Primary buttons should be 'si-laser' text on black bg with a 1px 'si-laser' border. Hover: bg-si-laser text-black.",
+      "cards": "Flat 'si-panel' background. 1px border 'border-border'. No shadow. Hover: border-si-laser/50 transition-colors.",
+      "inputs": "Terminal style. No background, bottom border only, or full black background with monospace text.",
+      "chat_bubbles": "User: Border-only (border-white/20). AI: Full background (si-panel) with left-border accent (si-laser)."
+    },
+    "layout_strategy": {
+      "type": "The Control Room Grid",
+      "rules": [
+        "Use CSS Grid for the main layout.",
+        "Sidebar (Pattern Stats): Fixed width 300px or col-span-3.",
+        "Main Chat: Flexible center.",
+        "Right Panel (Reasoning/Metadata): Fixed width 350px or col-span-4.",
+        "Gap: gap-4 (tight).",
+        "Every panel must fill height (h-full)."
+      ]
+    },
+    "motion": {
+      "type": "Technical & Snappy",
+      "transitions": "duration-200 ease-out",
+      "micro_interactions": "Hovering a pattern ID should highlight it in the visualization.",
+      "text_effect": "Use a 'decoding' text effect for the AI response (random characters resolving to final text)."
+    },
+    "assets": {
+      "icons": "Lucide React (default). Use thin strokes (stroke-width={1.5}).",
+      "images": [
+        {
+          "category": "background_texture",
+          "url": "https://images.pexels.com/photos/225769/pexels-photo-225769.jpeg",
+          "description": "Abstract digital data flow for subtle background overlays (use with low opacity)"
+        },
+        {
+          "category": "cyber_grid",
+          "url": "https://images.pexels.com/photos/11167639/pexels-photo-11167639.jpeg",
+          "description": "High contrast grid texture for specific data panels"
+        }
+      ]
+    },
+    "universal_guidelines": [
+      "Do not use gradients for backgrounds. Use solid colors + noise/texture.",
+      "Do not use 'Inter' for headings.",
+      "Ensure all interactive elements have data-testid attributes.",
+      "Use 'sonner' for toasts.",
+      "Dark mode is the ONLY mode. Hardcode dark classes if necessary.",
+      "Avoid 'AI Slop' - no generic robot emojis. Use abstract geometric shapes for icons."
+    ]
+  },
+  "instructions_to_main_agent": {
+    "step_1": "Update tailwind.config.js with the 'si-*' colors and 'Chivo/Manrope/JetBrains' fonts.",
+    "step_2": "Install 'clsx' and 'tailwind-merge' if not present (standard for shadcn).",
+    "step_3": "Create a 'Layout' component that enforces the Control Room Grid.",
+    "step_4": "Build the 'ChatInterface' with the specific 'decoding' text effect.",
+    "step_5": "Implement the 'PatternVisualizer' using simple CSS grids or Canvas (no heavy 3D libs unless necessary).",
+    "step_6": "Ensure the 'Confidence Score' is a prominent, large monospace number."
+  }
+}
