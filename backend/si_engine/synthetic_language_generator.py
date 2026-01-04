@@ -221,20 +221,46 @@ class SyntheticLanguageGenerator:
         
         # Extract key concepts from query
         concepts = self._extract_concepts(query)
+        subject = concepts[0] if concepts else query
+        content = matched_response or self._generate_fallback(query)
         
-        # Fill template
-        if response_type == 'definition':
-            return template.format(
-                subject=concepts[0] if concepts else query,
-                definition=matched_response or "a concept requiring further analysis"
-            )
-        elif response_type == 'uncertainty':
-            return template.format(
-                tentative_answer=matched_response or "insufficient pattern data",
-                confidence=int(confidence * 100)
-            )
-        else:
-            return template.format(content=matched_response or self._generate_fallback(query))
+        # Fill template with safe formatting
+        try:
+            if response_type == 'definition':
+                return template.format(
+                    subject=subject,
+                    definition=content
+                )
+            elif response_type == 'uncertainty':
+                return template.format(
+                    tentative_answer=content,
+                    confidence=int(confidence * 100)
+                )
+            elif response_type == 'explanation':
+                return template.format(
+                    subject=subject,
+                    mechanism=content[:200] if len(content) > 200 else content,
+                    details=content[200:] if len(content) > 200 else ""
+                )
+            elif response_type == 'reason':
+                return template.format(
+                    subject=subject,
+                    reason=content
+                )
+            elif response_type == 'comparison':
+                return template.format(
+                    subject1=subject,
+                    subject2=concepts[1] if len(concepts) > 1 else "the alternative",
+                    property1="exhibits certain characteristics",
+                    property2="shows different traits",
+                    difference=content,
+                    comparison=content
+                )
+            else:
+                return template.format(content=content)
+        except KeyError:
+            # Fallback if template formatting fails
+            return content
             
     def _enhance_response(self, response: str, query: str) -> str:
         """Enhance a response based on query context"""
