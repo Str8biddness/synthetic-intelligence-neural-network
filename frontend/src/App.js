@@ -438,6 +438,19 @@ const ChatInterface = () => {
           <div className="flex items-center gap-4">
             <Tooltip>
               <TooltipTrigger asChild>
+                <a 
+                  href="/generate"
+                  className="text-si-muted hover:text-si-indigo transition-colors"
+                  data-testid="image-gen-link"
+                >
+                  <Image size={18} />
+                </a>
+              </TooltipTrigger>
+              <TooltipContent>Image Generation</TooltipContent>
+            </Tooltip>
+            
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <button 
                   onClick={clearChat}
                   className="text-si-muted hover:text-si-text transition-colors"
