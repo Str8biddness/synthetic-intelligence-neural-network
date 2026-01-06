@@ -85,12 +85,12 @@ class SIEngineAPITester:
             return False
 
     def test_si_ask_endpoint(self):
-        """Test main SI query endpoint"""
+        """Test main SI query endpoint with FAISS integration"""
         test_queries = [
-            "What is consciousness?",
+            "What is gravity?",  # Specific test from review request
             "Explain quantum mechanics",
-            "How does gravity work?",
-            "What is the meaning of life?"
+            "How does consciousness work?",
+            "What is machine learning?"
         ]
         
         all_passed = True
@@ -111,15 +111,15 @@ class SIEngineAPITester:
                                 f"Missing fields: {missing_fields}", response_time)
                     all_passed = False
                 else:
-                    # Check response time requirement (sub-500ms)
+                    # Check response time requirement (should be fast with FAISS)
                     actual_response_time = data.get('response_time_ms', 0)
-                    sub_500ms = actual_response_time < 500
+                    fast_response = actual_response_time < 50  # FAISS should be under 50ms
                     
                     confidence = data.get('confidence', 0)
                     patterns_used = data.get('patterns_used', 0)
                     
                     details = f"Confidence: {confidence:.2f}, Patterns: {patterns_used}, " \
-                             f"Internal time: {actual_response_time:.1f}ms, Sub-500ms: {sub_500ms}"
+                             f"Internal time: {actual_response_time:.1f}ms, Fast response: {fast_response}"
                     
                     self.log_test(f"SI Ask - {query[:20]}...", True, details, response_time)
             else:
