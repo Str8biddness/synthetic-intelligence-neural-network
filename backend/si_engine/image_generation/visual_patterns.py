@@ -973,10 +973,17 @@ class VisualPatternDatabase:
         return {
             'total_patterns': len(self.patterns),
             'by_level': {level: len(ids) for level, ids in self.level_index.items()},
+            'by_category': {cat: len(ids) for cat, ids in self.category_index.items()},
             'total_tags': len(self.tag_index),
+            'total_categories': len(self.category_index),
             'top_tags': sorted(
                 [(tag, len(ids)) for tag, ids in self.tag_index.items()],
                 key=lambda x: x[1],
                 reverse=True
             )[:10]
         }
+    
+    def get_patterns_by_category(self, category: str) -> List[VisualPattern]:
+        """Get all patterns in a category"""
+        pattern_ids = self.category_index.get(category, set())
+        return [self.patterns[pid] for pid in pattern_ids]
