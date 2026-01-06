@@ -326,6 +326,126 @@ async def get_session_messages(session_id: str, limit: int = 50):
     ).sort('timestamp', 1).limit(limit).to_list(limit)
     return {"messages": messages}
 
+# ==================== WEB SEARCH ENDPOINTS ====================
+
+class WebSearchRequest(BaseModel):
+    query: str
+    max_results: int = 10
+    extract_patterns: bool = True
+
+@api_router.post("/si/web-search")
+async def web_search(request: WebSearchRequest):
+    """
+    Search the web using DuckDuckGo and extract patterns
+    Results are cached and patterns can be auto-added to the database
+    """
+    try:
+        result = si_engine.web_search.search(
+            query=request.query,
+            max_results=request.max_results,
+            extract_patterns=request.extract_patterns
+        )
+        return result
+    except Exception as e:
+        logger.error(f"Web search error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/si/web-search/stats")
+async def get_web_search_stats():
+    """Get web search statistics"""
+    try:
+        return si_engine.get_web_search_stats()
+    except Exception as e:
+        logger.error(f"Error getting web search stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/si/web-search/clear-cache")
+async def clear_web_search_cache():
+    """Clear the web search cache"""
+    try:
+        si_engine.clear_web_search_cache()
+        return {"success": True, "message": "Cache cleared"}
+    except Exception as e:
+        logger.error(f"Error clearing cache: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ==================== DAILY UPDATER ENDPOINTS ====================
+
+@api_router.post("/si/updater/run")
+async def run_pattern_update():
+    """
+    Manually trigger a pattern update from news sources
+    Scrapes HN, ArXiv, and GitHub for new patterns
+    """
+    try:
+        result = await si_engine.run_pattern_update()
+        return result
+    except Exception as e:
+        logger.error(f"Pattern update error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/si/updater/stats")
+async def get_updater_stats():
+    """Get daily updater statistics"""
+    try:
+        return si_engine.get_updater_stats()
+    except Exception as e:
+        logger.error(f"Error getting updater stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/si/updater/start")
+async def start_daily_updater():
+    """Start the scheduled daily updater (runs at 2 AM)"""
+    try:
+        si_engine.start_daily_updater()
+        return {"success": True, "message": "Daily updater started"}
+    except Exception as e:
+        logger.error(f"Error starting updater: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/si/updater/stop")
+async def stop_daily_updater():
+    """Stop the scheduled daily updater"""
+    try:
+        si_engine.stop_daily_updater()
+        return {"success": True, "message": "Daily updater stopped"}
+    except Exception as e:
+        logger.error(f"Error stopping updater: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ==================== SCALABLE PATTERN DB ENDPOINTS ====================
+
+@api_router.get("/si/scalable-db/stats")
+async def get_scalable_db_stats():
+    """Get scalable pattern database statistics (FAISS index info)"""
+    try:
+        return si_engine.get_scalable_db_stats()
+    except Exception as e:
+        logger.error(f"Error getting scalable DB stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+class FastSearchRequest(BaseModel):
+    query: str
+    top_k: int = 10
+    domain: Optional[str] = None
+
+@api_router.post("/si/fast-search")
+async def fast_pattern_search(request: FastSearchRequest):
+    """
+    Fast pattern search using FAISS index
+    Achieves <10ms search time even on 1M+ patterns
+    """
+    try:
+        results = si_engine.search_patterns_fast(
+            query=request.query,
+            top_k=request.top_k,
+            domain=request.domain
+        )
+        return {"results": results, "count": len(results)}
+    except Exception as e:
+        logger.error(f"Fast search error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # ==================== HEALTH CHECK ====================
 
 @api_router.get("/health")
