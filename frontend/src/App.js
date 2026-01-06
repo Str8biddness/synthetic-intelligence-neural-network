@@ -291,8 +291,152 @@ const ReasoningPanel = ({ currentResponse }) => {
   );
 };
 
-// Chat message component
-const ChatMessage = ({ message, isUser }) => {
+// Visual description detection - checks if text describes something visual
+const isVisualDescription = (text) => {
+  const visualKeywords = [
+    'picture', 'image', 'draw', 'paint', 'sketch', 'visualize', 'illustration',
+    'scene', 'landscape', 'portrait', 'artwork', 'design', 'graphic',
+    'show me', 'what does', 'looks like', 'appearance', 'visual',
+    'sunset', 'sunrise', 'mountain', 'ocean', 'forest', 'city', 'building',
+    'person', 'animal', 'flower', 'tree', 'sky', 'clouds', 'stars',
+    'abstract', 'geometric', 'pattern', 'color', 'shape',
+    'imagine', 'create', 'generate', 'render', 'depict'
+  ];
+  const lowerText = text.toLowerCase();
+  return visualKeywords.some(keyword => lowerText.includes(keyword));
+};
+
+// Inline generated image component with action buttons
+const InlineGeneratedImage = ({ imageData, prompt, onRegenerate, onEditPrompt }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const handleDownload = () => {
+    if (!imageData?.png_base64) return;
+    
+    const link = document.createElement('a');
+    link.href = `data:image/png;base64,${imageData.png_base64}`;
+    link.download = `si-generated-${Date.now()}.png`;
+    link.click();
+    toast.success('Image downloaded!');
+  };
+  
+  if (isLoading) {
+    return (
+      <div className="mt-3 p-4 border border-si-border rounded-sm bg-si-surface/30">
+        <div className="flex items-center gap-2 text-si-laser">
+          <Loader2 size={16} className="animate-spin" />
+          <span className="text-xs font-mono uppercase">Generating image...</span>
+        </div>
+        <div className="mt-3 h-48 bg-si-surface/50 rounded animate-pulse flex items-center justify-center">
+          <Sparkles size={24} className="text-si-muted" />
+        </div>
+      </div>
+    );
+  }
+  
+  if (!imageData) return null;
+  
+  return (
+    <div className="mt-3 border border-si-border rounded-sm overflow-hidden bg-si-surface/30">
+      {/* Image Header */}
+      <div className="px-3 py-2 border-b border-si-border flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Sparkles size={12} className="text-si-laser" />
+          <span className="text-xs font-mono uppercase text-si-muted">Generated Image</span>
+        </div>
+        <span className="text-[10px] text-si-muted font-mono">
+          {imageData.timing?.total_ms?.toFixed(0) || '?'}ms
+        </span>
+      </div>
+      
+      {/* Image Display */}
+      <div className="p-3">
+        {imageData.png_base64 ? (
+          <img 
+            src={`data:image/png;base64,${imageData.png_base64}`}
+            alt="Generated visualization"
+            className="w-full max-w-md mx-auto rounded border border-si-border"
+          />
+        ) : imageData.svg ? (
+          <div 
+            className="w-full max-w-md mx-auto rounded border border-si-border bg-white p-2"
+            dangerouslySetInnerHTML={{ __html: imageData.svg }}
+          />
+        ) : null}
+      </div>
+      
+      {/* Action Buttons */}
+      <div className="px-3 py-2 border-t border-si-border flex items-center gap-2">
+        <button
+          onClick={onRegenerate}
+          className="flex items-center gap-1 px-2 py-1 text-xs font-mono uppercase text-si-muted hover:text-si-laser transition-colors border border-si-border rounded hover:border-si-laser"
+        >
+          <RotateCcw size={12} />
+          Regenerate
+        </button>
+        <button
+          onClick={onEditPrompt}
+          className="flex items-center gap-1 px-2 py-1 text-xs font-mono uppercase text-si-muted hover:text-si-laser transition-colors border border-si-border rounded hover:border-si-laser"
+        >
+          <Zap size={12} />
+          Edit Prompt
+        </button>
+        <button
+          onClick={handleDownload}
+          className="flex items-center gap-1 px-2 py-1 text-xs font-mono uppercase text-si-muted hover:text-si-laser transition-colors border border-si-border rounded hover:border-si-laser"
+        >
+          <ChevronRight size={12} />
+          Download
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Chat message component with inline image generation
+const ChatMessage = ({ message, isUser, onGenerateImage, onEditPrompt }) => {
+  const [generatedImage, setGeneratedImage] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [showGenerateButton, setShowGenerateButton] = useState(false);
+  
+  // Check if this AI response could have an image generated
+  useEffect(() => {
+    if (!isUser && message.content) {
+      setShowGenerateButton(isVisualDescription(message.content));
+    }
+  }, [isUser, message.content]);
+  
+  const handleGenerateImage = async () => {
+    if (isGenerating) return;
+    setIsGenerating(true);
+    
+    try {
+      const response = await axios.post(`${API}/generate-image`, {
+        description: message.content,
+        use_optimizer: true
+      });
+      
+      setGeneratedImage(response.data);
+      toast.success('Image generated!');
+    } catch (error) {
+      console.error('Image generation error:', error);
+      toast.error('Failed to generate image');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+  
+  const handleRegenerate = async () => {
+    setGeneratedImage(null);
+    await handleGenerateImage();
+  };
+  
+  const handleEditPrompt = () => {
+    if (onEditPrompt) {
+      onEditPrompt(message.content);
+    }
+  };
+  
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
       <div 
@@ -304,14 +448,45 @@ const ChatMessage = ({ message, isUser }) => {
         data-testid={isUser ? "user-message" : "ai-message"}
       >
         {!isUser && (
-          <div className="flex items-center gap-2 mb-2">
-            <Brain size={14} className="text-si-laser" />
-            <span className="text-xs text-si-laser font-mono uppercase">SI Response</span>
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <div className="flex items-center gap-2">
+              <Brain size={14} className="text-si-laser" />
+              <span className="text-xs text-si-laser font-mono uppercase">SI Response</span>
+            </div>
+            
+            {/* Generate Image Button */}
+            {showGenerateButton && !generatedImage && !isGenerating && (
+              <button
+                onClick={handleGenerateImage}
+                className="flex items-center gap-1 px-2 py-1 text-xs font-mono text-si-muted hover:text-si-laser transition-colors border border-si-border rounded hover:border-si-laser hover:bg-si-surface/50"
+                title="Generate an image from this response"
+              >
+                <Sparkles size={12} />
+                🎨 Generate Image
+              </button>
+            )}
+            
+            {isGenerating && (
+              <div className="flex items-center gap-1 px-2 py-1 text-xs font-mono text-si-laser">
+                <Loader2 size={12} className="animate-spin" />
+                Generating...
+              </div>
+            )}
           </div>
         )}
         <div className={`${isUser ? 'font-mono text-sm' : 'text-sm leading-relaxed'}`}>
           {isUser ? message.content : <DecodingText text={message.content} speed={5} />}
         </div>
+        
+        {/* Inline Generated Image */}
+        {!isUser && generatedImage && (
+          <InlineGeneratedImage 
+            imageData={generatedImage}
+            prompt={message.content}
+            onRegenerate={handleRegenerate}
+            onEditPrompt={handleEditPrompt}
+          />
+        )}
       </div>
     </div>
   );
