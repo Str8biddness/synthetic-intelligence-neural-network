@@ -726,6 +726,7 @@ const ChatInterface = () => {
                       message={msg} 
                       isUser={msg.isUser}
                       onEditPrompt={handleEditPrompt}
+                      originalQuery={msg.originalQuery}
                     />
                   ))}
                   {isLoading && <LoadingIndicator />}
