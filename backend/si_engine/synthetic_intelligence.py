@@ -1,15 +1,20 @@
 """
 SyntheticIntelligence - Main SI Engine Orchestrator
 Coordinates all SI components for query processing
+
+Now with FAISS-based ScalablePatternDatabase for high-performance pattern matching,
+WebSearchModule for real-time web search, and DailyPatternUpdater for knowledge updates.
 """
 
 import time
 import uuid
+import asyncio
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
 from .pattern_database import PatternDatabase
+from .scalable_pattern_db import ScalablePatternDatabase, Pattern as ScalablePattern
 from .pattern_matcher import PatternMatcher
 from .quasi_reasoning_engine import QuasiReasoningEngine, CognitiveStrategy
 from .synthetic_language_generator import SyntheticLanguageGenerator
@@ -29,6 +34,10 @@ from .image_generation.optimization import RealTimeOptimizer
 from .web_access import WebAccess
 from .hardware_acceleration import HardwareAccelerator
 from .memory_system import MemorySystem
+
+# New modules
+from .web_search_module import WebSearchModule
+from .daily_pattern_updater import DailyPatternUpdater
 
 
 @dataclass
