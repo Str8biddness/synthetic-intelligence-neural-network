@@ -290,6 +290,127 @@ class SIEngineAPITester:
             self.log_test("Image Generation Stats", False, f"Status code: {status_code}", response_time)
             return False
 
+    def test_faiss_fast_search_endpoint(self):
+        """Test FAISS fast search endpoint"""
+        test_queries = [
+            "quantum mechanics",  # Specific test from review request
+            "machine learning",
+            "artificial intelligence",
+            "physics concepts"
+        ]
+        
+        all_passed = True
+        for query in test_queries:
+            success, data, response_time, status_code = self.make_request(
+                'POST', 'si/fast-search',
+                {'query': query, 'top_k': 10}
+            )
+            
+            if success:
+                results = data.get('results', [])
+                count = data.get('count', 0)
+                
+                # Check if response time is under 50ms (FAISS requirement)
+                fast_response = response_time < 50
+                
+                details = f"Found {count} results, Response time: {response_time:.1f}ms, " \
+                         f"Fast response (<50ms): {fast_response}"
+                
+                self.log_test(f"FAISS Fast Search - {query[:20]}...", True, details, response_time)
+            else:
+                self.log_test(f"FAISS Fast Search - {query[:20]}...", False, 
+                            f"Status code: {status_code}", response_time)
+                all_passed = False
+        
+        return all_passed
+
+    def test_scalable_db_stats_endpoint(self):
+        """Test scalable database statistics endpoint (FAISS index info)"""
+        success, data, response_time, status_code = self.make_request('GET', 'si/scalable-db/stats')
+        
+        if success:
+            total_patterns = data.get('total_patterns', 0)
+            index_size = data.get('index_size', 0)
+            dimension = data.get('dimension', 0)
+            
+            # Check if we have the expected 36 patterns
+            expected_patterns = 36
+            has_expected_patterns = total_patterns == expected_patterns
+            
+            details = f"Total patterns: {total_patterns} (expected: {expected_patterns}), " \
+                     f"Index size: {index_size}, Dimension: {dimension}, " \
+                     f"Expected patterns: {has_expected_patterns}"
+            
+            self.log_test("Scalable DB Stats (FAISS)", True, details, response_time)
+            return True
+        else:
+            self.log_test("Scalable DB Stats (FAISS)", False, f"Status code: {status_code}", response_time)
+            return False
+
+    def test_web_search_endpoint(self):
+        """Test web search module endpoint"""
+        test_queries = [
+            "machine learning",  # Specific test from review request
+            "artificial intelligence",
+            "quantum computing"
+        ]
+        
+        all_passed = True
+        for query in test_queries:
+            success, data, response_time, status_code = self.make_request(
+                'POST', 'si/web-search',
+                {'query': query, 'max_results': 5, 'extract_patterns': True}
+            )
+            
+            if success:
+                results = data.get('results', [])
+                patterns_extracted = data.get('patterns_extracted', 0)
+                
+                details = f"Found {len(results)} results, Patterns extracted: {patterns_extracted}"
+                self.log_test(f"Web Search - {query[:20]}...", True, details, response_time)
+            else:
+                self.log_test(f"Web Search - {query[:20]}...", False, 
+                            f"Status code: {status_code}", response_time)
+                all_passed = False
+        
+        return all_passed
+
+    def test_web_search_stats_endpoint(self):
+        """Test web search statistics endpoint"""
+        success, data, response_time, status_code = self.make_request('GET', 'si/web-search/stats')
+        
+        if success:
+            total_searches = data.get('total_searches', 0)
+            cache_hits = data.get('cache_hits', 0)
+            patterns_extracted = data.get('total_patterns_extracted', 0)
+            
+            details = f"Total searches: {total_searches}, Cache hits: {cache_hits}, " \
+                     f"Patterns extracted: {patterns_extracted}"
+            
+            self.log_test("Web Search Stats", True, details, response_time)
+            return True
+        else:
+            self.log_test("Web Search Stats", False, f"Status code: {status_code}", response_time)
+            return False
+
+    def test_updater_stats_endpoint(self):
+        """Test daily updater statistics endpoint"""
+        success, data, response_time, status_code = self.make_request('GET', 'si/updater/stats')
+        
+        if success:
+            last_update = data.get('last_update', 'Never')
+            total_updates = data.get('total_updates', 0)
+            patterns_added = data.get('patterns_added_today', 0)
+            
+            details = f"Last update: {last_update}, Total updates: {total_updates}, " \
+                     f"Patterns added today: {patterns_added}"
+            
+            self.log_test("Daily Updater Stats", True, details, response_time)
+            return True
+        else:
+            self.log_test("Daily Updater Stats", False, f"Status code: {status_code}", response_time)
+            return False
+
     def test_performance_requirements(self):
         """Test sub-500ms response time requirement"""
         if not self.response_times:
