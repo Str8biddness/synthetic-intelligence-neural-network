@@ -451,11 +451,16 @@ async def fast_pattern_search(request: FastSearchRequest):
 @api_router.get("/health")
 async def health_check():
     """Health check endpoint"""
+    scalable_db_enabled = si_engine.use_scalable_db and si_engine.scalable_pattern_db is not None
     return {
         "status": "healthy",
         "si_engine": "operational",
         "patterns_loaded": si_engine.pattern_db._initialized,
-        "entities_loaded": si_engine.entity_kb._initialized
+        "entities_loaded": si_engine.entity_kb._initialized,
+        "scalable_db_enabled": scalable_db_enabled,
+        "scalable_db_patterns": len(si_engine.scalable_pattern_db.patterns) if scalable_db_enabled else 0,
+        "web_search_enabled": True,
+        "daily_updater_available": True
     }
 
 #
