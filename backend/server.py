@@ -285,6 +285,47 @@ async def health_check():
         "entities_loaded": si_engine.entity_kb._initialized
     }
 
+#
+# 
+# =================== TEST ENDPOINT ====================
+
+@api_router.get("/si/test")
+async def test_si_capabilities():
+    """Test endpoint to demonstrate all SI capabilities"""
+    
+    # Get hardware info
+    hw_info = si_engine.hardware.hardware_info.to_dict()
+    
+    # Get memory stats
+    memory_stats = si_engine.memory.get_stats()
+    
+    # Test web access
+    web_result = si_engine.web_access.search_web("Python programming", num_results=2)
+    web_data = [r.to_dict() for r in web_result]
+    
+    # Create test session
+    session = si_engine.memory.create_session()
+    
+    # Store test memory
+    si_engine.memory.store(
+        session.id, 
+        "Test query about AI", 
+        "query",
+        importance=0.8
+    )
+    
+    return {
+        "status": "operational",
+        "capabilities": {
+            "hardware": hw_info,
+            "memory": memory_stats,
+            "web_access": {
+                "enabled": True,
+                "test_results": web_data[:2] if web_data else []
+            },
+            "session_id": session.id
+        }
+    }
 # Include router
 app.include_router(api_router)
 

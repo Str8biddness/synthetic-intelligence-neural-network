@@ -18,6 +18,9 @@ from .world_modeling_engine import WorldModelingEngine
 from .self_modeling_engine import SelfModelingEngine
 from .entity_knowledge_base import EntityKnowledgeBase
 from .parallel_reality_engine import ParallelRealityEngine
+from .web_access import WebAccess
+from .hardware_acceleration import HardwareAccelerator
+from .memory_system import MemorySystem
 
 
 @dataclass
@@ -95,6 +98,15 @@ class SyntheticIntelligence:
         self.world_model = WorldModelingEngine(self.pattern_db)
         self.self_model = SelfModelingEngine(self.pattern_db)
         self.parallel_reality = ParallelRealityEngine(self.pattern_db, self.world_model)
+                
+        # New capabilities
+        self.web_access = WebAccess()
+        self.hardware = HardwareAccelerator()
+        self.memory = MemorySystem()
+        
+        # Log hardware info
+        hw_info = self.hardware.hardware_info
+        print(f"🔧 Hardware: {hw_info.cpu_count} CPUs, {hw_info.ram_total_gb:.1f}GB RAM")
         
         # Consciousness state
         self.consciousness = ConsciousnessState(
