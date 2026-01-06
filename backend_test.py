@@ -74,7 +74,10 @@ class SIEngineAPITester:
         success, data, response_time, status_code = self.make_request('GET', 'health')
         
         if success and data.get('status') == 'healthy':
-            details = f"SI engine operational: {data.get('si_engine', 'unknown')}"
+            scalable_db_enabled = data.get('scalable_db_enabled', False)
+            scalable_db_patterns = data.get('scalable_db_patterns', 0)
+            details = f"SI engine operational: {data.get('si_engine', 'unknown')}, " \
+                     f"Scalable DB enabled: {scalable_db_enabled}, Patterns: {scalable_db_patterns}"
             self.log_test("Health Check", True, details, response_time)
             return True
         else:
