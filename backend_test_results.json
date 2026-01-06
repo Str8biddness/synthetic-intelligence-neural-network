@@ -1,88 +1,130 @@
 {
-  "total_tests": 11,
-  "passed_tests": 11,
+  "total_tests": 17,
+  "passed_tests": 17,
   "failed_tests": 0,
   "success_rate": 100.0,
-  "avg_response_time_ms": 44.60549354553223,
-  "max_response_time_ms": 80.44314384460449,
+  "avg_response_time_ms": 51.08004808425903,
+  "max_response_time_ms": 120.50604820251465,
   "sub_500ms_percentage": 100.0,
   "test_results": [
     {
       "test_name": "Health Check",
       "success": true,
       "details": "SI engine operational: operational",
-      "response_time_ms": 80.44314384460449,
-      "timestamp": "2026-01-04T14:11:37.442222"
+      "response_time_ms": 120.50604820251465,
+      "timestamp": "2026-01-06T00:12:22.969847"
     },
     {
       "test_name": "SI Ask - What is consciousnes...",
       "success": true,
-      "details": "Confidence: 0.85, Patterns: 5, Internal time: 1.8ms, Sub-500ms: True",
-      "response_time_ms": 47.00112342834473,
-      "timestamp": "2026-01-04T14:11:37.489920"
+      "details": "Confidence: 0.85, Patterns: 5, Internal time: 1.9ms, Sub-500ms: True",
+      "response_time_ms": 70.96147537231445,
+      "timestamp": "2026-01-06T00:12:23.041494"
     },
     {
       "test_name": "SI Ask - Explain quantum mech...",
       "success": true,
       "details": "Confidence: 0.75, Patterns: 2, Internal time: 1.2ms, Sub-500ms: True",
-      "response_time_ms": 41.57400131225586,
-      "timestamp": "2026-01-04T14:11:37.532194"
+      "response_time_ms": 43.27845573425293,
+      "timestamp": "2026-01-06T00:12:23.085481"
     },
     {
       "test_name": "SI Ask - How does gravity wor...",
       "success": true,
-      "details": "Confidence: 0.72, Patterns: 5, Internal time: 1.9ms, Sub-500ms: True",
-      "response_time_ms": 44.65150833129883,
-      "timestamp": "2026-01-04T14:11:37.577590"
+      "details": "Confidence: 0.72, Patterns: 5, Internal time: 2.2ms, Sub-500ms: True",
+      "response_time_ms": 40.493011474609375,
+      "timestamp": "2026-01-06T00:12:23.126646"
     },
     {
       "test_name": "SI Ask - What is the meaning ...",
       "success": true,
-      "details": "Confidence: 0.85, Patterns: 2, Internal time: 1.3ms, Sub-500ms: True",
-      "response_time_ms": 41.46862030029297,
-      "timestamp": "2026-01-04T14:11:37.619828"
+      "details": "Confidence: 0.85, Patterns: 2, Internal time: 1.6ms, Sub-500ms: True",
+      "response_time_ms": 46.25725746154785,
+      "timestamp": "2026-01-06T00:12:23.173563"
     },
     {
       "test_name": "SI Simulate",
       "success": true,
       "details": "Generated 4 reality branches",
-      "response_time_ms": 39.740562438964844,
-      "timestamp": "2026-01-04T14:11:37.660343"
+      "response_time_ms": 44.5094108581543,
+      "timestamp": "2026-01-06T00:12:23.218782"
     },
     {
       "test_name": "SI Causal Reasoning",
       "success": true,
       "details": "Causal analysis completed",
-      "response_time_ms": 38.90585899353027,
-      "timestamp": "2026-01-04T14:11:37.699968"
+      "response_time_ms": 109.54999923706055,
+      "timestamp": "2026-01-06T00:12:23.329109"
     },
     {
       "test_name": "SI Statistics",
       "success": true,
       "details": "Patterns: 36, Entities: 43, Avg response: 1.7ms",
-      "response_time_ms": 42.91534423828125,
-      "timestamp": "2026-01-04T14:11:37.743661"
+      "response_time_ms": 38.83814811706543,
+      "timestamp": "2026-01-06T00:12:23.368607"
     },
     {
       "test_name": "SI Patterns",
       "success": true,
       "details": "Retrieved 20 patterns, showing 20",
-      "response_time_ms": 33.260345458984375,
-      "timestamp": "2026-01-04T14:11:37.777884"
+      "response_time_ms": 39.41798210144043,
+      "timestamp": "2026-01-06T00:12:23.408876"
     },
     {
       "test_name": "SI Self-Observe",
       "success": true,
       "details": "Self-observation completed",
-      "response_time_ms": 36.09442710876465,
-      "timestamp": "2026-01-04T14:11:37.814785"
+      "response_time_ms": 37.10365295410156,
+      "timestamp": "2026-01-06T00:12:23.447074"
+    },
+    {
+      "test_name": "Generate Image - sunset over ocean wi...",
+      "success": true,
+      "details": "Generated SVG (3561 chars), Time: 0.0ms, Sub-500ms: True",
+      "response_time_ms": 37.97626495361328,
+      "timestamp": "2026-01-06T00:12:23.485919"
+    },
+    {
+      "test_name": "Generate Image - person walking dog i...",
+      "success": true,
+      "details": "Generated SVG (4363 chars), Time: 0.0ms, Sub-500ms: True",
+      "response_time_ms": 34.73234176635742,
+      "timestamp": "2026-01-06T00:12:23.521288"
+    },
+    {
+      "test_name": "Generate Image - house with tree on s...",
+      "success": true,
+      "details": "Generated SVG (3152 chars), Time: 0.4ms, Sub-500ms: True",
+      "response_time_ms": 37.567853927612305,
+      "timestamp": "2026-01-06T00:12:23.559557"
+    },
+    {
+      "test_name": "Generate Image - red car on mountain ...",
+      "success": true,
+      "details": "Generated SVG (3095 chars), Time: 0.4ms, Sub-500ms: True",
+      "response_time_ms": 40.01116752624512,
+      "timestamp": "2026-01-06T00:12:23.600336"
+    },
+    {
+      "test_name": "Visual Patterns",
+      "success": true,
+      "details": "Retrieved 19 patterns, found 8/8 base patterns",
+      "response_time_ms": 38.40446472167969,
+      "timestamp": "2026-01-06T00:12:23.639663"
+    },
+    {
+      "test_name": "Image Generation Stats",
+      "success": true,
+      "details": "Total generations: 0, Avg time: 0.0ms, Cache hit rate: 0.0%",
+      "response_time_ms": 37.673234939575195,
+      "timestamp": "2026-01-06T00:12:23.678002"
     },
     {
       "test_name": "Performance Requirements",
       "success": true,
-      "details": "Avg: 44.6ms, Max: 80.4ms, Sub-500ms: 100.0% (10/10)",
+      "details": "Avg: 51.1ms, Max: 120.5ms, Sub-500ms: 100.0% (16/16)",
       "response_time_ms": 0,
-      "timestamp": "2026-01-04T14:11:37.814843"
+      "timestamp": "2026-01-06T00:12:23.678050"
     }
   ]
 }
