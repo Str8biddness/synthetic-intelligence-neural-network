@@ -79,6 +79,10 @@ class FeedbackRequest(BaseModel):
     response_id: str
     success: bool
 
+class ImageGenerateRequest(BaseModel):
+    description: str
+    use_optimizer: bool = True
+
 class ChatMessage(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     session_id: str
