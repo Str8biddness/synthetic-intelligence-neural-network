@@ -444,6 +444,11 @@ class SIEngineAPITester:
         # Test all SI endpoints
         tests = [
             self.test_si_ask_endpoint,
+            self.test_faiss_fast_search_endpoint,  # New FAISS test
+            self.test_scalable_db_stats_endpoint,  # New FAISS test
+            self.test_web_search_endpoint,  # New web search test
+            self.test_web_search_stats_endpoint,  # New web search stats test
+            self.test_updater_stats_endpoint,  # New updater stats test
             self.test_si_simulate_endpoint,
             self.test_si_causal_endpoint,
             self.test_si_stats_endpoint,
