@@ -181,14 +181,15 @@ class TextToVisualDecomposer:
                 if keyword in text:
                     entity_words.add(keyword)
         
-        # Also check for direct pattern matches
+        # Also check for direct pattern matches from SI pattern database
         if self.pattern_db:
             for pattern in self.pattern_db.get_all_patterns():
-                if pattern.name.lower() in text:
-                    entity_words.add(pattern.name.lower())
-                for tag in pattern.semantic_tags:
-                    if tag.lower() in text:
-                        entity_words.add(tag.lower())
+                # SI Pattern objects use 'pattern' attribute, not 'name'
+                pattern_text = getattr(pattern, 'pattern', '').lower()
+                if pattern_text and any(word in text for word in pattern_text.split()):
+                    for word in pattern_text.split():
+                        if word in text and len(word) > 3:
+                            entity_words.add(word)
         
         # Create concepts for each entity
         processed = set()
