@@ -127,6 +127,8 @@ test_plan:
     - "FAISS Scalable DB Stats Endpoint"
     - "Web Search Module"
     - "Health Check with FAISS Status"
+    - "WebLLM Toggle Component"
+    - "Chat Functionality with SI Engine"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
