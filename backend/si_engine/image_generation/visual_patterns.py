@@ -926,6 +926,12 @@ class VisualPatternDatabase:
         if pattern.abstraction_level not in self.level_index:
             self.level_index[pattern.abstraction_level] = set()
         self.level_index[pattern.abstraction_level].add(pattern.id)
+        
+        # Update category index
+        category = getattr(pattern, 'category', 'general')
+        if category not in self.category_index:
+            self.category_index[category] = set()
+        self.category_index[category].add(pattern.id)
     
     def get_pattern(self, pattern_id: str) -> Optional[VisualPattern]:
         """Get pattern by ID"""
