@@ -167,6 +167,9 @@ const StatsPanel = ({ stats, onRefresh }) => {
               </div>
             </div>
           )}
+          
+          {/* WebLLM Toggle */}
+          <WebLLMToggle />
         </div>
       </ScrollArea>
     </div>
