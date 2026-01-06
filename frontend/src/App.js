@@ -295,15 +295,30 @@ const ReasoningPanel = ({ currentResponse }) => {
 
 // Visual description detection - checks if text describes something visual
 const isVisualDescription = (text) => {
+  if (!text) return false;
+  
   const visualKeywords = [
+    // Direct visual requests
     'picture', 'image', 'draw', 'paint', 'sketch', 'visualize', 'illustration',
-    'scene', 'landscape', 'portrait', 'artwork', 'design', 'graphic',
-    'show me', 'what does', 'looks like', 'appearance', 'visual',
+    'show me', 'what does', 'look like', 'looks like', 'appearance', 'visual',
+    'imagine', 'create', 'generate', 'render', 'depict', 'describe',
+    // Scene types
+    'scene', 'landscape', 'portrait', 'artwork', 'design', 'graphic', 'view',
+    // Nature
     'sunset', 'sunrise', 'mountain', 'ocean', 'forest', 'city', 'building',
-    'person', 'animal', 'flower', 'tree', 'sky', 'clouds', 'stars',
-    'abstract', 'geometric', 'pattern', 'color', 'shape',
-    'imagine', 'create', 'generate', 'render', 'depict'
+    'beach', 'lake', 'river', 'waterfall', 'cave', 'desert', 'valley', 'hill',
+    // Objects
+    'person', 'animal', 'flower', 'tree', 'sky', 'clouds', 'stars', 'moon', 'sun',
+    'house', 'car', 'boat', 'plane', 'bird', 'fish', 'cat', 'dog',
+    // Abstract/artistic
+    'abstract', 'geometric', 'pattern', 'color', 'shape', 'circle', 'square',
+    'triangle', 'spiral', 'wave', 'gradient', 'texture',
+    // Weather/atmosphere  
+    'rain', 'snow', 'fog', 'storm', 'lightning', 'rainbow', 'aurora',
+    // Light/color
+    'bright', 'dark', 'glow', 'shine', 'shadow', 'light', 'colorful'
   ];
+  
   const lowerText = text.toLowerCase();
   return visualKeywords.some(keyword => lowerText.includes(keyword));
 };
