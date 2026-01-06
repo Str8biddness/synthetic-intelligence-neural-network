@@ -490,3 +490,111 @@ class SyntheticIntelligence:
             'optimizer_metrics': self.image_optimizer.get_metrics(),
             'controller_stats': self.image_controller.get_generation_stats()
         }
+    
+    # ==================== WEB SEARCH ====================
+    
+    def web_search(
+        self, 
+        query: str, 
+        max_results: int = 10,
+        extract_patterns: bool = True
+    ) -> Dict[str, Any]:
+        """
+        Search the web using DuckDuckGo and optionally extract patterns
+        
+        Args:
+            query: Search query
+            max_results: Maximum number of results
+            extract_patterns: Whether to extract and add patterns to DB
+            
+        Returns:
+            Dict with results, patterns, and metadata
+        """
+        result = self.web_search.search(
+            query=query,
+            max_results=max_results,
+            extract_patterns=extract_patterns
+        )
+        
+        # If patterns were added and using scalable DB, rebuild index
+        if extract_patterns and result.get('patterns') and self.use_scalable_db:
+            # Note: In production, you'd want incremental index updates
+            pass
+        
+        return result
+    
+    def get_web_search_stats(self) -> Dict[str, Any]:
+        """Get web search statistics"""
+        return self.web_search.get_statistics()
+    
+    def clear_web_search_cache(self):
+        """Clear web search cache"""
+        self.web_search.clear_cache()
+    
+    # ==================== DAILY PATTERN UPDATER ====================
+    
+    async def run_pattern_update(self) -> Dict[str, Any]:
+        """
+        Manually trigger a pattern update from news sources
+        
+        Returns:
+            Dict with update results including items scraped and patterns added
+        """
+        return await self.daily_updater.run_update()
+    
+    def run_pattern_update_sync(self) -> Dict[str, Any]:
+        """
+        Synchronous wrapper for pattern update
+        """
+        return self.daily_updater.run_update_sync()
+    
+    def start_daily_updater(self):
+        """Start the scheduled daily updater (runs at 2 AM)"""
+        self.daily_updater.start_scheduler()
+    
+    def stop_daily_updater(self):
+        """Stop the scheduled daily updater"""
+        self.daily_updater.stop_scheduler()
+    
+    def get_updater_stats(self) -> Dict[str, Any]:
+        """Get daily updater statistics"""
+        return self.daily_updater.get_statistics()
+    
+    # ==================== SCALABLE PATTERN DB ====================
+    
+    def get_scalable_db_stats(self) -> Dict[str, Any]:
+        """Get scalable pattern database statistics"""
+        if self.scalable_pattern_db:
+            stats = self.scalable_pattern_db.get_statistics()
+            return {
+                'total_patterns': stats.total_patterns,
+                'index_type': stats.index_type,
+                'vector_dimension': stats.vector_dimension,
+                'categories': stats.categories,
+                'avg_search_time_ms': stats.avg_search_time_ms,
+                'index_size_mb': stats.index_size_mb
+            }
+        return {'error': 'Scalable pattern database not enabled'}
+    
+    def search_patterns_fast(
+        self, 
+        query: str, 
+        top_k: int = 10,
+        domain: Optional[str] = None
+    ) -> List[Dict]:
+        """
+        Fast pattern search using FAISS index
+        
+        Args:
+            query: Search query
+            top_k: Number of results
+            domain: Optional domain filter
+            
+        Returns:
+            List of matching patterns with scores
+        """
+        if not self.scalable_pattern_db:
+            return []
+        
+        results = self.scalable_pattern_db.search(query, top_k=top_k, domain=domain)
+        return [r.to_dict() for r in results]
