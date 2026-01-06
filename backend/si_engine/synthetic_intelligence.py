@@ -98,12 +98,39 @@ class SyntheticIntelligence:
     """
     Main Synthetic Intelligence Engine
     Orchestrates all SI components for intelligent query processing
+    
+    Now includes:
+    - ScalablePatternDatabase (FAISS-based) for high-performance pattern matching
+    - WebSearchModule for real-time web search and pattern extraction
+    - DailyPatternUpdater for automated knowledge updates
     """
     
-    def __init__(self):
-        # Initialize all components
+    def __init__(self, use_scalable_db: bool = True):
+        """
+        Initialize SI Engine
+        
+        Args:
+            use_scalable_db: Whether to use FAISS-based scalable pattern database (default: True)
+        """
+        self.use_scalable_db = use_scalable_db
+        
+        # Initialize pattern databases
+        # Keep original for compatibility with other components
         self.pattern_db = PatternDatabase()
         self.pattern_db.initialize_with_seed_data()
+        
+        # Initialize scalable pattern database (FAISS-based)
+        if use_scalable_db:
+            print("🚀 Initializing FAISS-based ScalablePatternDatabase...")
+            self.scalable_pattern_db = ScalablePatternDatabase(
+                dimension=256,
+                nlist=100,
+                nprobe=10
+            )
+            self._migrate_patterns_to_scalable_db()
+            print(f"✅ ScalablePatternDatabase ready with {len(self.scalable_pattern_db.patterns)} patterns")
+        else:
+            self.scalable_pattern_db = None
         
         self.entity_kb = EntityKnowledgeBase()
         self.entity_kb.initialize()
@@ -145,6 +172,25 @@ class SyntheticIntelligence:
         self.hardware = HardwareAccelerator()
         self.memory = MemorySystem()
         
+        # Initialize web search module
+        self.web_search = WebSearchModule(
+            cache_size=1000,
+            cache_ttl=3600,
+            auto_add_to_db=True
+        )
+        # Connect to pattern database for auto-adding patterns
+        if use_scalable_db:
+            self.web_search.set_pattern_database(self.scalable_pattern_db)
+        else:
+            self.web_search.set_pattern_database(self.pattern_db)
+        
+        # Initialize daily pattern updater
+        self.daily_updater = DailyPatternUpdater(
+            pattern_db=self.scalable_pattern_db if use_scalable_db else self.pattern_db,
+            run_time="02:00",
+            max_patterns_per_run=100
+        )
+        
         # Log hardware info
         hw_info = self.hardware.hardware_info
         print(f"🔧 Hardware: {hw_info.cpu_count} CPUs, {hw_info.ram_total_gb:.1f}GB RAM")
@@ -161,6 +207,26 @@ class SyntheticIntelligence:
         # Session tracking
         self.sessions: Dict[str, Dict] = {}
         self.current_session_id: Optional[str] = None
+    
+    def _migrate_patterns_to_scalable_db(self):
+        """Migrate patterns from PatternDatabase to ScalablePatternDatabase"""
+        seed_patterns = self.pattern_db._get_seed_patterns()
+        
+        for p_data in seed_patterns:
+            scalable_pattern = ScalablePattern(
+                id=p_data.get('id', str(uuid.uuid4())),
+                pattern=p_data['pattern'],
+                response=p_data['response'],
+                domain=p_data['domain'],
+                topics=p_data['topics'],
+                keywords=p_data.get('keywords', []),
+                success_rate=p_data.get('success_rate', 0.9),
+                confidence=p_data.get('confidence', 0.85)
+            )
+            self.scalable_pattern_db.add_pattern(scalable_pattern)
+        
+        # Build FAISS index
+        self.scalable_pattern_db.build_index(show_progress=True)
         
     def process_query(self, query: str, session_id: Optional[str] = None) -> SIResponse:
         """
