@@ -247,6 +247,55 @@ async def search_entities(query: str):
         logger.error(f"Error searching entities: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# ==================== IMAGE GENERATION ENDPOINTS ====================
+
+@api_router.post("/generate-image")
+async def generate_image(request: ImageGenerateRequest):
+    """
+    Generate an image from text description using pattern-based composition
+    No neural networks - pure pattern matching and composition
+    """
+    try:
+        result = si_engine.generate_image(
+            request.description,
+            use_optimizer=request.use_optimizer
+        )
+        return result
+    except Exception as e:
+        logger.error(f"Error generating image: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/visual-patterns")
+async def get_visual_patterns(tags: Optional[str] = None, limit: int = 20):
+    """Get visual patterns from database"""
+    try:
+        tag_list = tags.split(',') if tags else None
+        patterns = si_engine.get_visual_patterns(tags=tag_list, limit=limit)
+        return {"patterns": patterns, "count": len(patterns)}
+    except Exception as e:
+        logger.error(f"Error getting visual patterns: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/visual-patterns/{pattern_id}/preview")
+async def get_visual_pattern_preview(pattern_id: str):
+    """Get SVG preview of a visual pattern"""
+    try:
+        preview = si_engine.get_visual_pattern_preview(pattern_id)
+        return preview
+    except Exception as e:
+        logger.error(f"Error getting pattern preview: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/image-generation/stats")
+async def get_image_generation_stats():
+    """Get image generation statistics"""
+    try:
+        stats = si_engine.get_image_generation_stats()
+        return stats
+    except Exception as e:
+        logger.error(f"Error getting image generation stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # ==================== SESSION ENDPOINTS ====================
 
 @api_router.post("/sessions", response_model=Session)
