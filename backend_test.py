@@ -325,6 +325,9 @@ class SIEngineAPITester:
             self.test_si_stats_endpoint,
             self.test_si_patterns_endpoint,
             self.test_si_self_observe_endpoint,
+            self.test_generate_image_endpoint,
+            self.test_visual_patterns_endpoint,
+            self.test_image_generation_stats_endpoint,
             self.test_performance_requirements
         ]
         
