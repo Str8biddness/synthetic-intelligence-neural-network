@@ -231,14 +231,37 @@ class SyntheticIntelligence:
     def process_query(self, query: str, session_id: Optional[str] = None) -> SIResponse:
         """
         Main query processing pipeline
+        Now uses ScalablePatternDatabase (FAISS) for high-performance pattern matching
         """
         start_time = time.time()
         
         # Update consciousness state
         self._update_consciousness('processing', query)
         
-        # Step 1: Pattern Matching
-        matched_patterns = self.pattern_matcher.match(query, top_k=5)
+        # Step 1: Pattern Matching - Use scalable DB if available for fast FAISS search
+        if self.use_scalable_db and self.scalable_pattern_db:
+            # Use FAISS-based search for <10ms performance
+            scalable_results = self.scalable_pattern_db.search(query, top_k=5)
+            # Convert to format compatible with other components
+            matched_patterns = []
+            for result in scalable_results:
+                # Create a compatible pattern object
+                from .pattern_database import Pattern as OriginalPattern
+                pattern = OriginalPattern(
+                    id=result.pattern.id,
+                    pattern=result.pattern.pattern,
+                    response=result.pattern.response,
+                    domain=result.pattern.domain,
+                    topics=result.pattern.topics,
+                    keywords=result.pattern.keywords,
+                    success_rate=result.pattern.success_rate,
+                    confidence=result.score  # Use search score as confidence
+                )
+                pattern.pattern_id = result.pattern.id  # Add pattern_id attribute
+                matched_patterns.append(pattern)
+        else:
+            # Fallback to original pattern matcher
+            matched_patterns = self.pattern_matcher.match(query, top_k=5)
         
         # Step 2: Entity Grounding
         grounded_entities = self.entity_kb.ground_query(query)
