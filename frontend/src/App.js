@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import { ScrollArea } from "./components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/ui/tooltip";
+import { WebLLMProvider, useWebLLM } from "./context/WebLLMContext";
+import WebLLMToggle from "./components/WebLLMToggle";
 import "@/App.css";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
