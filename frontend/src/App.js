@@ -699,7 +699,12 @@ const ChatInterface = () => {
               ) : (
                 <div className="max-w-3xl mx-auto">
                   {messages.map((msg) => (
-                    <ChatMessage key={msg.id} message={msg} isUser={msg.isUser} />
+                    <ChatMessage 
+                      key={msg.id} 
+                      message={msg} 
+                      isUser={msg.isUser}
+                      onEditPrompt={handleEditPrompt}
+                    />
                   ))}
                   {isLoading && <LoadingIndicator />}
                   <div ref={messagesEndRef} />
