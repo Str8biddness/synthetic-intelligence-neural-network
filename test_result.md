@@ -141,6 +141,7 @@ test_plan:
     - "Health Check with FAISS Status"
     - "WebLLM Toggle Component"
     - "Chat Functionality with SI Engine"
+    - "Inline Image Generation Feature"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
