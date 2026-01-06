@@ -335,20 +335,38 @@ class VisualPattern:
 class VisualPatternDatabase:
     """
     In-memory visual pattern database with semantic search
+    Now includes 500+ expanded patterns organized by category
     """
     
     def __init__(self):
         self.patterns: Dict[str, VisualPattern] = {}
         self.tag_index: Dict[str, Set[str]] = {}  # tag -> pattern_ids
         self.level_index: Dict[int, Set[str]] = {}  # abstraction_level -> pattern_ids
+        self.category_index: Dict[str, Set[str]] = {}  # category -> pattern_ids
         self._initialized = False
     
     def initialize(self):
-        """Initialize with base patterns"""
+        """Initialize with base patterns + expanded patterns"""
         if self._initialized:
             return
         
+        # Add base patterns
         base_patterns = self._get_base_patterns()
+        for pattern in base_patterns:
+            self.add_pattern(pattern)
+        
+        # Add expanded patterns (500+)
+        try:
+            from .expanded_patterns import get_all_expanded_patterns
+            expanded = get_all_expanded_patterns()
+            for pattern in expanded:
+                self.add_pattern(pattern)
+            print(f"✅ Loaded {len(expanded)} expanded visual patterns")
+        except Exception as e:
+            print(f"⚠️ Could not load expanded patterns: {e}")
+        
+        self._initialized = True
+        print(f"📊 Total visual patterns: {len(self.patterns)}")
         for pattern in base_patterns:
             self.add_pattern(pattern)
         
