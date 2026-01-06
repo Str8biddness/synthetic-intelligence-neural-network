@@ -752,6 +752,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ChatInterface />} />
+          <Route path="/generate" element={<ImageGenerator />} />
         </Routes>
       </BrowserRouter>
     </div>
