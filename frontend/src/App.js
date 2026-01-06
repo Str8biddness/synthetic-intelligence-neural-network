@@ -551,6 +551,201 @@ const ChatInterface = () => {
   );
 };
 
+// Image Generation Component
+const ImageGenerator = () => {
+  const [prompt, setPrompt] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedSvg, setGeneratedSvg] = useState(null);
+  const [generationStats, setGenerationStats] = useState(null);
+  
+  const generateImage = async () => {
+    if (!prompt.trim() || isGenerating) return;
+    
+    setIsGenerating(true);
+    setGeneratedSvg(null);
+    
+    try {
+      const response = await axios.post(`${API}/generate-image`, {
+        description: prompt
+      });
+      
+      if (response.data.success) {
+        setGeneratedSvg(response.data.svg);
+        setGenerationStats({
+          totalTime: response.data.total_time_ms,
+          stageTimes: response.data.stage_times,
+          cacheHit: response.data.cache_hit
+        });
+        toast.success(`Image generated in ${response.data.total_time_ms?.toFixed(0) || 0}ms`);
+      } else {
+        toast.error(response.data.error || "Failed to generate image");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Failed to generate image");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+  
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      generateImage();
+    }
+  };
+  
+  return (
+    <TooltipProvider>
+      <div className="h-screen flex flex-col bg-si-black">
+        {/* Header */}
+        <header className="flex items-center justify-between px-6 py-4 border-b border-si-border">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 flex items-center justify-center border border-si-indigo" style={{boxShadow: '0 0 20px rgba(99, 102, 241, 0.3)'}}>
+              <Image size={20} className="text-si-indigo" />
+            </div>
+            <div>
+              <h1 className="font-heading text-xl tracking-tight">
+                Pattern-Based Image Generation
+              </h1>
+              <p className="text-xs text-si-muted font-mono">
+                NO NEURAL NETWORKS • PURE PATTERN COMPOSITION
+              </p>
+            </div>
+          </div>
+          
+          <a href="/" className="si-btn text-xs">
+            <Brain size={14} className="inline mr-2" />
+            Chat Interface
+          </a>
+        </header>
+        
+        {/* Main content */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* Input & Controls */}
+          <aside className="w-80 border-r border-si-border si-panel flex flex-col">
+            <div className="p-4 border-b border-si-border">
+              <h2 className="font-heading text-sm uppercase tracking-wider text-si-muted mb-4">
+                Describe Your Image
+              </h2>
+              <textarea
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="e.g., a red car on a mountain road with sunset sky..."
+                className="w-full h-32 bg-transparent border border-si-border p-3 text-sm resize-none focus:border-si-indigo focus:outline-none"
+                disabled={isGenerating}
+                data-testid="image-prompt-input"
+              />
+              <button
+                onClick={generateImage}
+                disabled={isGenerating || !prompt.trim()}
+                className="w-full mt-3 si-btn flex items-center justify-center gap-2"
+                data-testid="generate-image-btn"
+                style={{borderColor: '#6366F1', color: '#6366F1'}}
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles size={16} />
+                    Generate Image
+                  </>
+                )}
+              </button>
+            </div>
+            
+            {/* Sample prompts */}
+            <div className="p-4 border-b border-si-border">
+              <h3 className="text-xs text-si-muted uppercase tracking-wider mb-3">Sample Prompts</h3>
+              <div className="space-y-2">
+                {[
+                  "sunset over ocean with sailboat",
+                  "person walking dog in park",
+                  "house with tree on sunny day",
+                  "rainy mountain road with car"
+                ].map((sample) => (
+                  <button
+                    key={sample}
+                    onClick={() => setPrompt(sample)}
+                    className="w-full text-left text-xs p-2 border border-si-border hover:border-si-indigo hover:text-si-indigo transition-colors"
+                    data-testid="sample-prompt-btn"
+                  >
+                    <ChevronRight size={12} className="inline mr-1" />
+                    {sample}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            {/* Generation Stats */}
+            {generationStats && (
+              <div className="p-4">
+                <h3 className="text-xs text-si-muted uppercase tracking-wider mb-3">Generation Stats</h3>
+                <div className="space-y-2 text-xs font-mono">
+                  <div className="flex justify-between">
+                    <span className="text-si-muted">Total Time:</span>
+                    <span className="text-si-laser">{generationStats.totalTime?.toFixed(0) || 0}ms</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-si-muted">Cache Hit:</span>
+                    <span>{generationStats.cacheHit ? 'Yes' : 'No'}</span>
+                  </div>
+                  {generationStats.stageTimes && Object.entries(generationStats.stageTimes).map(([stage, time]) => (
+                    <div key={stage} className="flex justify-between text-[10px]">
+                      <span className="text-si-muted">{stage}:</span>
+                      <span>{time?.toFixed(0) || 0}ms</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </aside>
+          
+          {/* Canvas Area */}
+          <main className="flex-1 flex items-center justify-center p-8 grid-bg">
+            {generatedSvg ? (
+              <div className="bg-white rounded-sm shadow-2xl p-4" data-testid="generated-image-container">
+                <div 
+                  dangerouslySetInnerHTML={{ __html: generatedSvg }}
+                  className="w-full h-full"
+                />
+              </div>
+            ) : (
+              <div className="text-center">
+                <div className="w-32 h-32 mx-auto flex items-center justify-center border border-si-border mb-6">
+                  <Image size={48} className="text-si-muted" />
+                </div>
+                <h2 className="font-heading text-xl mb-2 text-si-muted">
+                  Pattern-Based Image Generation
+                </h2>
+                <p className="text-sm text-si-muted max-w-md">
+                  Describe a scene and the SI engine will compose it using pure pattern matching.
+                  No neural networks, no diffusion models — just intelligent pattern composition.
+                </p>
+              </div>
+            )}
+          </main>
+        </div>
+        
+        <Toaster 
+          position="bottom-right" 
+          toastOptions={{
+            style: {
+              background: 'var(--si-panel)',
+              border: '1px solid var(--si-border)',
+              color: 'var(--si-text)',
+            },
+          }}
+        />
+      </div>
+    </TooltipProvider>
+  );
+};
+
 function App() {
   return (
     <div className="App">
