@@ -411,17 +411,20 @@ const InlineGeneratedImage = ({ imageData, prompt, onRegenerate, onEditPrompt })
 };
 
 // Chat message component with inline image generation
-const ChatMessage = ({ message, isUser, onGenerateImage, onEditPrompt }) => {
+const ChatMessage = ({ message, isUser, onEditPrompt, originalQuery }) => {
   const [generatedImage, setGeneratedImage] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showGenerateButton, setShowGenerateButton] = useState(false);
   
   // Check if this AI response could have an image generated
+  // Check both the original user query AND the AI response for visual content
   useEffect(() => {
     if (!isUser && message.content) {
-      setShowGenerateButton(isVisualDescription(message.content));
+      const hasVisualQuery = originalQuery ? isVisualDescription(originalQuery) : false;
+      const hasVisualResponse = isVisualDescription(message.content);
+      setShowGenerateButton(hasVisualQuery || hasVisualResponse);
     }
-  }, [isUser, message.content]);
+  }, [isUser, message.content, originalQuery]);
   
   const handleGenerateImage = async () => {
     if (isGenerating) return;
