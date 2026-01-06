@@ -763,14 +763,16 @@ const ImageGenerator = () => {
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<ChatInterface />} />
-          <Route path="/generate" element={<ImageGenerator />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <WebLLMProvider>
+      <div className="App">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<ChatInterface />} />
+            <Route path="/generate" element={<ImageGenerator />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </WebLLMProvider>
   );
 }
 
