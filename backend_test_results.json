@@ -1,130 +1,200 @@
 {
-  "total_tests": 17,
-  "passed_tests": 17,
+  "total_tests": 27,
+  "passed_tests": 27,
   "failed_tests": 0,
   "success_rate": 100.0,
-  "avg_response_time_ms": 51.08004808425903,
-  "max_response_time_ms": 120.50604820251465,
-  "sub_500ms_percentage": 100.0,
+  "avg_response_time_ms": 148.79736533531775,
+  "max_response_time_ms": 1037.7223491668701,
+  "sub_500ms_percentage": 92.3076923076923,
   "test_results": [
     {
       "test_name": "Health Check",
       "success": true,
-      "details": "SI engine operational: operational",
-      "response_time_ms": 120.50604820251465,
-      "timestamp": "2026-01-06T00:12:22.969847"
+      "details": "SI engine operational: operational, Scalable DB enabled: True, Patterns: 36",
+      "response_time_ms": 157.9134464263916,
+      "timestamp": "2026-01-06T04:01:52.084712"
     },
     {
-      "test_name": "SI Ask - What is consciousnes...",
+      "test_name": "SI Ask - What is gravity?...",
       "success": true,
-      "details": "Confidence: 0.85, Patterns: 5, Internal time: 1.9ms, Sub-500ms: True",
-      "response_time_ms": 70.96147537231445,
-      "timestamp": "2026-01-06T00:12:23.041494"
+      "details": "Confidence: 0.54, Patterns: 5, Internal time: 25.2ms, Fast response: True",
+      "response_time_ms": 71.05898857116699,
+      "timestamp": "2026-01-06T04:01:52.156641"
     },
     {
       "test_name": "SI Ask - Explain quantum mech...",
       "success": true,
-      "details": "Confidence: 0.75, Patterns: 2, Internal time: 1.2ms, Sub-500ms: True",
-      "response_time_ms": 43.27845573425293,
-      "timestamp": "2026-01-06T00:12:23.085481"
+      "details": "Confidence: 0.63, Patterns: 5, Internal time: 1.6ms, Fast response: True",
+      "response_time_ms": 107.74016380310059,
+      "timestamp": "2026-01-06T04:01:52.265037"
     },
     {
-      "test_name": "SI Ask - How does gravity wor...",
+      "test_name": "SI Ask - How does consciousne...",
       "success": true,
-      "details": "Confidence: 0.72, Patterns: 5, Internal time: 2.2ms, Sub-500ms: True",
-      "response_time_ms": 40.493011474609375,
-      "timestamp": "2026-01-06T00:12:23.126646"
+      "details": "Confidence: 0.32, Patterns: 5, Internal time: 2.0ms, Fast response: True",
+      "response_time_ms": 101.83000564575195,
+      "timestamp": "2026-01-06T04:01:52.367634"
     },
     {
-      "test_name": "SI Ask - What is the meaning ...",
+      "test_name": "SI Ask - What is machine lear...",
       "success": true,
-      "details": "Confidence: 0.85, Patterns: 2, Internal time: 1.6ms, Sub-500ms: True",
-      "response_time_ms": 46.25725746154785,
-      "timestamp": "2026-01-06T00:12:23.173563"
+      "details": "Confidence: 0.55, Patterns: 5, Internal time: 1.9ms, Fast response: True",
+      "response_time_ms": 98.75249862670898,
+      "timestamp": "2026-01-06T04:01:52.467328"
+    },
+    {
+      "test_name": "FAISS Fast Search - quantum mechanics...",
+      "success": true,
+      "details": "Found 10 results, Response time: 103.5ms, Fast response (<50ms): False",
+      "response_time_ms": 103.52087020874023,
+      "timestamp": "2026-01-06T04:01:52.571573"
+    },
+    {
+      "test_name": "FAISS Fast Search - machine learning...",
+      "success": true,
+      "details": "Found 10 results, Response time: 87.8ms, Fast response (<50ms): False",
+      "response_time_ms": 87.75877952575684,
+      "timestamp": "2026-01-06T04:01:52.660022"
+    },
+    {
+      "test_name": "FAISS Fast Search - artificial intellige...",
+      "success": true,
+      "details": "Found 10 results, Response time: 88.9ms, Fast response (<50ms): False",
+      "response_time_ms": 88.92273902893066,
+      "timestamp": "2026-01-06T04:01:52.749954"
+    },
+    {
+      "test_name": "FAISS Fast Search - physics concepts...",
+      "success": true,
+      "details": "Found 10 results, Response time: 109.6ms, Fast response (<50ms): False",
+      "response_time_ms": 109.61699485778809,
+      "timestamp": "2026-01-06T04:01:52.860336"
+    },
+    {
+      "test_name": "Scalable DB Stats (FAISS)",
+      "success": true,
+      "details": "Total patterns: 36 (expected: 36), Index size: 0, Dimension: 0, Expected patterns: True",
+      "response_time_ms": 107.0556640625,
+      "timestamp": "2026-01-06T04:01:52.968217"
+    },
+    {
+      "test_name": "Web Search - machine learning...",
+      "success": true,
+      "details": "Found 0 results, Patterns extracted: 0",
+      "response_time_ms": 427.40797996520996,
+      "timestamp": "2026-01-06T04:01:53.396428"
+    },
+    {
+      "test_name": "Web Search - artificial intellige...",
+      "success": true,
+      "details": "Found 0 results, Patterns extracted: 0",
+      "response_time_ms": 871.039628982544,
+      "timestamp": "2026-01-06T04:01:54.268185"
+    },
+    {
+      "test_name": "Web Search - quantum computing...",
+      "success": true,
+      "details": "Found 0 results, Patterns extracted: 0",
+      "response_time_ms": 1037.7223491668701,
+      "timestamp": "2026-01-06T04:01:55.306597"
+    },
+    {
+      "test_name": "Web Search Stats",
+      "success": true,
+      "details": "Total searches: 3, Cache hits: 0, Patterns extracted: 0",
+      "response_time_ms": 41.31722450256348,
+      "timestamp": "2026-01-06T04:01:55.348618"
+    },
+    {
+      "test_name": "Daily Updater Stats",
+      "success": true,
+      "details": "Last update: Never, Total updates: 0, Patterns added today: 0",
+      "response_time_ms": 45.627593994140625,
+      "timestamp": "2026-01-06T04:01:55.394918"
     },
     {
       "test_name": "SI Simulate",
       "success": true,
       "details": "Generated 4 reality branches",
-      "response_time_ms": 44.5094108581543,
-      "timestamp": "2026-01-06T00:12:23.218782"
+      "response_time_ms": 38.21229934692383,
+      "timestamp": "2026-01-06T04:01:55.433862"
     },
     {
       "test_name": "SI Causal Reasoning",
       "success": true,
       "details": "Causal analysis completed",
-      "response_time_ms": 109.54999923706055,
-      "timestamp": "2026-01-06T00:12:23.329109"
+      "response_time_ms": 38.44165802001953,
+      "timestamp": "2026-01-06T04:01:55.473044"
     },
     {
       "test_name": "SI Statistics",
       "success": true,
-      "details": "Patterns: 36, Entities: 43, Avg response: 1.7ms",
-      "response_time_ms": 38.83814811706543,
-      "timestamp": "2026-01-06T00:12:23.368607"
+      "details": "Patterns: 36, Entities: 43, Avg response: 6.5ms",
+      "response_time_ms": 35.29834747314453,
+      "timestamp": "2026-01-06T04:01:55.509341"
     },
     {
       "test_name": "SI Patterns",
       "success": true,
       "details": "Retrieved 20 patterns, showing 20",
-      "response_time_ms": 39.41798210144043,
-      "timestamp": "2026-01-06T00:12:23.408876"
+      "response_time_ms": 34.75761413574219,
+      "timestamp": "2026-01-06T04:01:55.545731"
     },
     {
       "test_name": "SI Self-Observe",
       "success": true,
       "details": "Self-observation completed",
-      "response_time_ms": 37.10365295410156,
-      "timestamp": "2026-01-06T00:12:23.447074"
+      "response_time_ms": 42.51670837402344,
+      "timestamp": "2026-01-06T04:01:55.588930"
     },
     {
       "test_name": "Generate Image - sunset over ocean wi...",
       "success": true,
-      "details": "Generated SVG (3561 chars), Time: 0.0ms, Sub-500ms: True",
-      "response_time_ms": 37.97626495361328,
-      "timestamp": "2026-01-06T00:12:23.485919"
+      "details": "Generated SVG (4576 chars), Time: 1.2ms, Sub-500ms: True",
+      "response_time_ms": 35.977840423583984,
+      "timestamp": "2026-01-06T04:01:55.625709"
     },
     {
       "test_name": "Generate Image - person walking dog i...",
       "success": true,
-      "details": "Generated SVG (4363 chars), Time: 0.0ms, Sub-500ms: True",
-      "response_time_ms": 34.73234176635742,
-      "timestamp": "2026-01-06T00:12:23.521288"
+      "details": "Generated SVG (4361 chars), Time: 0.5ms, Sub-500ms: True",
+      "response_time_ms": 37.73212432861328,
+      "timestamp": "2026-01-06T04:01:55.664256"
     },
     {
       "test_name": "Generate Image - house with tree on s...",
       "success": true,
-      "details": "Generated SVG (3152 chars), Time: 0.4ms, Sub-500ms: True",
-      "response_time_ms": 37.567853927612305,
-      "timestamp": "2026-01-06T00:12:23.559557"
+      "details": "Generated SVG (5188 chars), Time: 0.4ms, Sub-500ms: True",
+      "response_time_ms": 40.064334869384766,
+      "timestamp": "2026-01-06T04:01:55.705359"
     },
     {
       "test_name": "Generate Image - red car on mountain ...",
       "success": true,
-      "details": "Generated SVG (3095 chars), Time: 0.4ms, Sub-500ms: True",
-      "response_time_ms": 40.01116752624512,
-      "timestamp": "2026-01-06T00:12:23.600336"
+      "details": "Generated SVG (3290 chars), Time: 0.4ms, Sub-500ms: True",
+      "response_time_ms": 35.46714782714844,
+      "timestamp": "2026-01-06T04:01:55.741633"
     },
     {
       "test_name": "Visual Patterns",
       "success": true,
       "details": "Retrieved 19 patterns, found 8/8 base patterns",
-      "response_time_ms": 38.40446472167969,
-      "timestamp": "2026-01-06T00:12:23.639663"
+      "response_time_ms": 37.72783279418945,
+      "timestamp": "2026-01-06T04:01:55.780278"
     },
     {
       "test_name": "Image Generation Stats",
       "success": true,
       "details": "Total generations: 0, Avg time: 0.0ms, Cache hit rate: 0.0%",
-      "response_time_ms": 37.673234939575195,
-      "timestamp": "2026-01-06T00:12:23.678002"
+      "response_time_ms": 35.25066375732422,
+      "timestamp": "2026-01-06T04:01:55.816311"
     },
     {
       "test_name": "Performance Requirements",
       "success": true,
-      "details": "Avg: 51.1ms, Max: 120.5ms, Sub-500ms: 100.0% (16/16)",
+      "details": "Avg: 148.8ms, Max: 1037.7ms, Sub-500ms: 92.3% (24/26)",
       "response_time_ms": 0,
-      "timestamp": "2026-01-06T00:12:23.678050"
+      "timestamp": "2026-01-06T04:01:55.816359"
     }
   ]
 }
