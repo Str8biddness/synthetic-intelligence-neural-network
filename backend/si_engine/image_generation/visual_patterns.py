@@ -280,6 +280,7 @@ class VisualPattern:
     usage_contexts: List[str] = field(default_factory=list)
     slots: Dict[str, str] = field(default_factory=dict)  # Named slots for composition
     bounding_box: Dict[str, float] = field(default_factory=lambda: {'width': 100, 'height': 100})
+    category: str = "general"  # Category for organization
     
     def to_svg(self, width: int = 200, height: int = 200) -> str:
         """Render pattern to SVG string"""
