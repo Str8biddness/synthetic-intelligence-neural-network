@@ -106,6 +106,30 @@ class SyntheticIntelligence:
         self.world_model = WorldModelingEngine(self.pattern_db)
         self.self_model = SelfModelingEngine(self.pattern_db)
         self.parallel_reality = ParallelRealityEngine(self.pattern_db, self.world_model)
+        
+        # Image Generation components
+        self.visual_pattern_db = VisualPatternDatabase()
+        self.visual_pattern_db.initialize()
+        
+        self.text_decomposer = TextToVisualDecomposer(self.pattern_db, self.entity_kb)
+        self.scene_composer = SceneComposer(self.visual_pattern_db, self.reasoning_engine, self.self_model)
+        self.image_renderer = PatternRenderer(self.visual_pattern_db)
+        
+        self.image_controller = ImageGenerationController(
+            self.visual_pattern_db,
+            self.text_decomposer,
+            self.scene_composer,
+            self.image_renderer,
+            self.self_model,
+            self.reasoning_engine
+        )
+        
+        self.image_optimizer = RealTimeOptimizer(
+            self.visual_pattern_db,
+            self.text_decomposer,
+            self.scene_composer,
+            self.image_renderer
+        )
                 
         # New capabilities
         self.web_access = WebAccess()
