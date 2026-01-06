@@ -18,6 +18,14 @@ from .world_modeling_engine import WorldModelingEngine
 from .self_modeling_engine import SelfModelingEngine
 from .entity_knowledge_base import EntityKnowledgeBase
 from .parallel_reality_engine import ParallelRealityEngine
+
+# Image Generation modules
+from .image_generation.visual_patterns import VisualPatternDatabase
+from .image_generation.text_to_visual import TextToVisualDecomposer
+from .image_generation.scene_composer import SceneComposer
+from .image_generation.renderer import PatternRenderer, RenderSettings
+from .image_generation.consciousness_controller import ImageGenerationController
+from .image_generation.optimization import RealTimeOptimizer
 from .web_access import WebAccess
 from .hardware_acceleration import HardwareAccelerator
 from .memory_system import MemorySystem
@@ -322,3 +330,41 @@ class SyntheticIntelligence:
         """Search entities in knowledge base"""
         entities = self.entity_kb.search_entities(query, limit=10)
         return [e.to_dict() for e in entities]
+    
+    # ==================== IMAGE GENERATION ====================
+    
+    def generate_image(self, description: str, use_optimizer: bool = True) -> Dict[str, Any]:
+        """
+        Generate an image from text description using pattern-based composition
+        
+        Args:
+            description: Text description of the image to generate
+            use_optimizer: Whether to use the optimized pipeline (default: True)
+            
+        Returns:
+            Dict with SVG, PNG (base64), timing info, and consciousness trace
+        """
+        if use_optimizer:
+            return self.image_optimizer.generate_optimized(description)
+        else:
+            return self.image_controller.generate_image(description)
+    
+    def get_visual_patterns(self, tags: Optional[List[str]] = None, limit: int = 20) -> List[Dict]:
+        """Get visual patterns from database"""
+        if tags:
+            patterns = self.visual_pattern_db.search_by_tags(tags, limit=limit)
+        else:
+            patterns = self.visual_pattern_db.get_all_patterns()[:limit]
+        return [p.to_dict() for p in patterns]
+    
+    def get_visual_pattern_preview(self, pattern_id: str) -> Dict[str, Any]:
+        """Get SVG preview of a visual pattern"""
+        return self.image_renderer.render_pattern_preview(pattern_id)
+    
+    def get_image_generation_stats(self) -> Dict[str, Any]:
+        """Get image generation statistics"""
+        return {
+            'visual_patterns': self.visual_pattern_db.get_statistics(),
+            'optimizer_metrics': self.image_optimizer.get_metrics(),
+            'controller_stats': self.image_controller.get_generation_stats()
+        }
