@@ -207,6 +207,86 @@ class SIEngineAPITester:
             self.log_test("SI Self-Observe", False, f"Status code: {status_code}", response_time)
             return False
 
+    def test_generate_image_endpoint(self):
+        """Test image generation endpoint"""
+        test_descriptions = [
+            "sunset over ocean with sailboat",
+            "person walking dog in park", 
+            "house with tree on sunny day",
+            "red car on mountain road"
+        ]
+        
+        all_passed = True
+        for description in test_descriptions:
+            success, data, response_time, status_code = self.make_request(
+                'POST', 'generate-image',
+                {'description': description, 'use_optimizer': True}
+            )
+            
+            if success:
+                # Validate response structure
+                required_fields = ['success', 'svg', 'total_time_ms']
+                missing_fields = [field for field in required_fields if field not in data]
+                
+                if missing_fields:
+                    self.log_test(f"Generate Image - {description[:20]}...", False,
+                                f"Missing fields: {missing_fields}", response_time)
+                    all_passed = False
+                elif not data.get('success'):
+                    self.log_test(f"Generate Image - {description[:20]}...", False,
+                                f"Generation failed: {data.get('error', 'Unknown error')}", response_time)
+                    all_passed = False
+                else:
+                    # Check sub-500ms requirement
+                    generation_time = data.get('total_time_ms', 0)
+                    sub_500ms = generation_time < 500
+                    svg_length = len(data.get('svg', ''))
+                    
+                    details = f"Generated SVG ({svg_length} chars), Time: {generation_time:.1f}ms, Sub-500ms: {sub_500ms}"
+                    self.log_test(f"Generate Image - {description[:20]}...", True, details, response_time)
+            else:
+                self.log_test(f"Generate Image - {description[:20]}...", False,
+                            f"Status code: {status_code}", response_time)
+                all_passed = False
+        
+        return all_passed
+
+    def test_visual_patterns_endpoint(self):
+        """Test visual patterns endpoint"""
+        success, data, response_time, status_code = self.make_request('GET', 'visual-patterns')
+        
+        if success and 'patterns' in data:
+            pattern_count = data.get('count', 0)
+            patterns = data.get('patterns', [])
+            
+            # Check if we have expected base patterns
+            pattern_names = [p.get('name', '') for p in patterns]
+            expected_patterns = ['circle', 'rectangle', 'triangle', 'tree', 'house', 'car', 'sun', 'cloud']
+            found_patterns = [name for name in expected_patterns if name in pattern_names]
+            
+            details = f"Retrieved {pattern_count} patterns, found {len(found_patterns)}/{len(expected_patterns)} base patterns"
+            self.log_test("Visual Patterns", True, details, response_time)
+            return True
+        else:
+            self.log_test("Visual Patterns", False, f"Status code: {status_code}", response_time)
+            return False
+
+    def test_image_generation_stats_endpoint(self):
+        """Test image generation statistics endpoint"""
+        success, data, response_time, status_code = self.make_request('GET', 'image-generation/stats')
+        
+        if success:
+            total_generations = data.get('total_generations', 0)
+            avg_time = data.get('avg_generation_time_ms', 0)
+            cache_hit_rate = data.get('cache_hit_rate', 0)
+            
+            details = f"Total generations: {total_generations}, Avg time: {avg_time:.1f}ms, Cache hit rate: {cache_hit_rate:.1%}"
+            self.log_test("Image Generation Stats", True, details, response_time)
+            return True
+        else:
+            self.log_test("Image Generation Stats", False, f"Status code: {status_code}", response_time)
+            return False
+
     def test_performance_requirements(self):
         """Test sub-500ms response time requirement"""
         if not self.response_times:
