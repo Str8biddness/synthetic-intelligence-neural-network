@@ -186,7 +186,9 @@ class QuasiReasoningEngine:
         # Extract supporting evidence from patterns
         for pattern in matched_patterns[:3]:
             if hasattr(pattern, 'response'):
-                supporting_evidence.append(f"Pattern '{pattern.pattern_text}' suggests: {pattern.response[:100]}...")
+                # Support both pattern_text and pattern attributes
+                pattern_name = getattr(pattern, 'pattern_text', None) or getattr(pattern, 'pattern', 'Unknown')
+                supporting_evidence.append(f"Pattern '{pattern_name}' suggests: {pattern.response[:100]}...")
                 
         # Generate alternative interpretations
         alternatives = self._generate_alternatives(query, query_type, matched_patterns)
