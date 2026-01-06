@@ -380,14 +380,14 @@ const InlineGeneratedImage = ({ imageData, prompt, onRegenerate, onEditPrompt })
           onClick={onEditPrompt}
           className="flex items-center gap-1 px-2 py-1 text-xs font-mono uppercase text-si-muted hover:text-si-laser transition-colors border border-si-border rounded hover:border-si-laser"
         >
-          <Zap size={12} />
+          <Pencil size={12} />
           Edit Prompt
         </button>
         <button
           onClick={handleDownload}
           className="flex items-center gap-1 px-2 py-1 text-xs font-mono uppercase text-si-muted hover:text-si-laser transition-colors border border-si-border rounded hover:border-si-laser"
         >
-          <ChevronRight size={12} />
+          <Download size={12} />
           Download
         </button>
       </div>
