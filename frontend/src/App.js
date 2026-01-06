@@ -15,7 +15,9 @@ import {
   RotateCcw,
   Info,
   Image,
-  Loader2
+  Loader2,
+  Download,
+  Pencil
 } from "lucide-react";
 import { ScrollArea } from "./components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/ui/tooltip";
