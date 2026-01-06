@@ -596,6 +596,16 @@ const ChatInterface = () => {
     setCurrentResponse(null);
   };
   
+  // Handle edit prompt from image generation
+  const handleEditPrompt = (content) => {
+    // Extract a shorter prompt for image generation from the content
+    const shortPrompt = content.length > 100 
+      ? content.substring(0, 100) + '...' 
+      : content;
+    setInput(`Generate image: ${shortPrompt}`);
+    toast.info('Prompt loaded - modify and send to generate a new image');
+  };
+  
   return (
     <TooltipProvider>
       <div className="h-screen flex flex-col bg-si-black">
