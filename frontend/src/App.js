@@ -565,6 +565,7 @@ const ChatInterface = () => {
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
     
+    const userQuery = input; // Store the original query
     const userMessage = { 
       id: Date.now().toString(),
       content: input, 
@@ -576,13 +577,14 @@ const ChatInterface = () => {
     
     try {
       const response = await axios.post(`${API}/si/ask`, {
-        query: input
+        query: userQuery
       });
       
       const aiMessage = {
         id: response.data.id,
         content: response.data.response,
-        isUser: false
+        isUser: false,
+        originalQuery: userQuery // Store original query with AI response
       };
       
       setMessages(prev => [...prev, aiMessage]);
